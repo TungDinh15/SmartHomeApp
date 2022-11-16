@@ -20,13 +20,13 @@ const app = express();
 app.use(express.json());
 app.use(userRouter);
 
-const test = async (email, password) => {
-    const user = await User.findOne({ email: email });
-    const result = await user.comparePassword(password);
-    console.log(result);
-};
+// const test = async (email, password) => {
+//     const user = await User.findOne({ email: email });
+//     const result = await user.comparePassword(password);
+//     console.log(result);
+// };
 
-test('tung4@gmail.com', 'ahehe');
+// test('tung4@gmail.com', 'ahehe');
 
 app.get('/test', (req, res) => {
     res.send('Hello World')
@@ -36,7 +36,10 @@ const email = 'tung1@gmail.com'
 
 // Print to website local
 app.get('/', (req, res) => {
-    res.send('Hello world');
+    res.json({
+        success: true,
+        message: 'Backend localhost'
+    });
 })
 
 // Listen and notice on port

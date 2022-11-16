@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const sharp = require('sharp');
+const cloudinary = require('../helper/imageUpload');
 
 // Send and save data to MongoDB
 exports.createUser = async (req, res) => {
@@ -21,8 +23,8 @@ exports.createUser = async (req, res) => {
         password,
     })
 
-    await user.save(user);
-    res.json(user);
+    await user.save();
+    res.json({success: true, user});
 };
 
 exports.userSignIn = async (req, res) => {
@@ -46,8 +48,37 @@ exports.userSignIn = async (req, res) => {
     const token = jwt.sign(
         { userId: user._id },
         process.env.JWT_SECRET, { expiresIn: '1d' }
-    )
+    );
+
+    const userInfo = {
+        fullname: user.fullname,
+        email: user.email,
+        avatar: user.avatar ? user.avatar : '',
+    }
 
     // Respond data to the frontend
-    res.json({ success: true, user, token })
+    res.json({ success: true, user: userInfo, token })
+};
+
+exports.uploadProfile = async (req, res) => {
+    const { user } = req
+    if (!user)
+        return res
+            .status(401)
+            .json({ success: false, message: 'Unauthorized access!' });
+
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            public_id: `${user._id}_profile`,
+            width: 500,
+            height: 500,
+            crop: 'fill'
+        });
+
+        await User.findByIdAndUpdate(user._id, { avatar: result.url });
+        res.status(201).json({ success: true, message: 'Your Profile is updated!' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error from server. try again!' });
+        console.log('Error while uploading profile image', error.message);
+    }
 };
