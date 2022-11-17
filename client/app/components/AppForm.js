@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,6 +9,7 @@ import {
     Animated,
     Dimensions,
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 // import sub component
 import FormHeader from './FormHeader';
@@ -68,11 +69,11 @@ const AppForm = ({ navigation }) => {
 
     return (
         <ImageBackground
-            source={require('./assets/main-background.png')}
+            source={require('../../assets/main-background.png')}
             resizeMode="cover"
             style={styles.backgroundImage}
         >
-            <StatusBar style='light' />
+            {/* <StatusBar style='light' /> */}
             <SafeAreaView style={{ flex: 1 }}>
                 <View style={{ flex: 1, paddingTop: 100 }}>
                     <View style={{ height: 80 }} >
@@ -122,6 +123,22 @@ const AppForm = ({ navigation }) => {
     )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
+    },
+    borderLeft: {
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8
+    },
+    borderRight: {
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8
+    }
+});
 
 export default AppForm;

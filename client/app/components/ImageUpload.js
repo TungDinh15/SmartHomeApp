@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import client from '../api/client';
-// import { Container } from './styles';
+import { StackActions } from '@react-navigation/native';
 
-const ImageUpload = () => {
+const ImageUpload = (props) => {
 
     const [profileImage, setProfileImage] = useState('');
+    const { token } = props.route.params;
 
     const openImageLibrary = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -33,7 +34,7 @@ const ImageUpload = () => {
                 setProfileImage(response.uri)
             }
         }
-    }
+    };
 
     const uploadProfileImage = async () => {
 
@@ -49,13 +50,25 @@ const ImageUpload = () => {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'multipart/form-data',
-                    authorization: 'JWT '
+                    authorization: `JWT ${token}`
                 }
             });
+
+            if (res.data.success) {
+                props.navigation.dispatch(
+                    StackActions.replace('UserProfile')
+                );
+            }
         } catch {
             console.log(error.message)
         }
     };
+
+    // const skipToMain = () => {
+    //     navigation.dispatch(
+    //         StackActions.replace('UserProfile')
+    //     )
+    // };
 
     return (
         <ImageBackground
@@ -83,6 +96,9 @@ const ImageUpload = () => {
                 </TouchableOpacity>
                 <Text
                     style={styles.skipBtn}
+                    onPress={() => props.navigation.dispatch(
+                        StackActions.replace('UserProfile')
+                    )}
                 >
                     Skip
                 </Text>

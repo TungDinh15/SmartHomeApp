@@ -89,12 +89,15 @@ const SignupForm = ({ navigation }) => {
                 {
                     email: values.email,
                     password: values.password
-                })
-            navigation.dispatch(
-                StackActions.replace('ImageUpload', {
+                });
 
-                })
-            )
+            if (signInRes.data.success) {
+                navigation.dispatch(
+                    StackActions.replace('ImageUpload', {
+                        token: signInRes.data.token,
+                    })
+                );
+            }
         }
 
         console.log(res.data)
