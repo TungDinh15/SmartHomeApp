@@ -80,7 +80,7 @@ const AppForm = ({ navigation }) => {
                         <FormHeader
                             leftHeading='Welcome'
                             rightHeading=' Back'
-                            subHeading='Smart Home Project'
+                            subHeading='HomeM'
                             rightHeaderOpacity={rightHeaderOpacity}
                             leftHeaderTranslateX={leftHeaderTranslateX}
                             rightHeaderTranslateY={rightHeaderTranslateY}

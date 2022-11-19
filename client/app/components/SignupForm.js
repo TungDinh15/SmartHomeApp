@@ -148,7 +148,7 @@ const SignupForm = ({ navigation }) => {
                                 value={password}
                                 error={touched.password && errors.password}
                                 autoCapitalize='none'
-                                secureTextEntry="true"
+                                secureTextEntry
                                 onChangeText={handleChange('password')}
                                 onBlur={handleBlur('password')}
                                 label="Password"
@@ -158,7 +158,7 @@ const SignupForm = ({ navigation }) => {
                                 value={confirmPassword}
                                 error={touched.confirmPassword && errors.confirmPassword}
                                 autoCapitalize='none'
-                                secureTextEntry="true"
+                                secureTextEntry
                                 onChangeText={handleChange('confirmPassword')}
                                 onBlur={handleBlur('confirmPassword')}
                                 label="Confirm Password"

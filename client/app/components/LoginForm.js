@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Dimensions, 
+    TextInput 
+} from 'react-native';
 import FormContainer from './FormContainer';
 import FormInput from './FormInput';
 import FormSubmitButton from './FormSubmitButton';
 import { isValidObjField, updateError, isValidEmail } from '../utils/methods';
 import client from '../api/client';
+import { useLogin } from '../context/LoginProvider';
 
 // import { Container } from './styles';
 
 const LoginForm = () => {
+
+    const { setIsLoggedIn, setProfile } = useLogin()
 
     const [userInfo, setUserInfo] = useState({
         email: '',
@@ -44,6 +53,8 @@ const LoginForm = () => {
                         email: '',
                         password: ''
                     });
+                    setProfile(res.data.user);
+                    setIsLoggedIn(true)
                 }
 
                 console.log(res.data);
@@ -77,7 +88,7 @@ const LoginForm = () => {
                 label="Password"
                 //placeholder="********"
                 autoCapitalize='none'
-                secureTextEntry={true}
+                secureTextEntry
             />
             <FormSubmitButton
                 onPress={submitForm}
