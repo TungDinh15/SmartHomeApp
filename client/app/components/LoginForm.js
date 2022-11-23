@@ -17,14 +17,14 @@ import { useLogin } from '../context/LoginProvider';
 
 const LoginForm = () => {
 
-    const { setIsLoggedIn, setProfile } = useLogin()
+    const { setIsLoggedIn, setProfile } = useLogin();
 
     const [userInfo, setUserInfo] = useState({
         email: '',
         password: '',
     });
 
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
 
     const { email, password } = userInfo;
 
