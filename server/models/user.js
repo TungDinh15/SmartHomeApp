@@ -18,7 +18,10 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-    }
+    },
+    tokens: [
+        { type: Object }
+    ]
 });
 
 // Hashing the password with Bcrypt package

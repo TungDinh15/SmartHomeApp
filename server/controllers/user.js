@@ -24,9 +24,10 @@ exports.createUser = async (req, res) => {
     })
 
     await user.save();
-    res.json({success: true, user});
+    res.json({ success: true, user });
 };
 
+//
 exports.userSignIn = async (req, res) => {
     const { email, password } = req.body;
 
@@ -50,6 +51,22 @@ exports.userSignIn = async (req, res) => {
         process.env.JWT_SECRET, { expiresIn: '1d' }
     );
 
+    let oldTokens = user.tokens || []
+
+    if (oldTokens.length) {
+        oldTokens = oldTokens.filter(t => {
+            const timeDiff = (Date.now() - parseInt(t.signedAt)) / 1000
+            if (timeDiff < 86400) {
+                return t
+            }
+        })
+    }
+
+    await User.findByIdAndUpdate(
+        user._id,
+        { tokens: [...oldTokens, { token, signedAt: Date.now().toString() }] }
+    )
+
     const userInfo = {
         fullname: user.fullname,
         email: user.email,
@@ -60,6 +77,7 @@ exports.userSignIn = async (req, res) => {
     res.json({ success: true, user: userInfo, token })
 };
 
+//
 exports.uploadProfile = async (req, res) => {
     const { user } = req
     if (!user)
@@ -82,3 +100,27 @@ exports.uploadProfile = async (req, res) => {
         console.log('Error while uploading profile image', error.message);
     }
 };
+
+//
+exports.signOut =  async(req, res) => {
+    if (req.headers && req.headers.authorization) {
+        const token = req.headers.authorization.split(' ')[1]
+        if (!token) {
+            return res.status.json({
+                success: false,
+                message: 'Authorization fail!'
+            })
+        }
+
+        const tokens = req.user.tokens;
+
+        const newTokens = tokens.filter(t => t.token !== token)
+
+        await User.findByIdAndUpdate(req.user._id, {tokens: newTokens})
+        res.json({success: true, message: 'Sign out successfully'})
+    }
+};
+
+
+
+

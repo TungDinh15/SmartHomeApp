@@ -10,6 +10,7 @@ import AppForm from './components/AppForm';
 import ImageUpload from './components/ImageUpload';
 import UserProfile from './components/UserProfile';
 import DrawerNavigator from './DrawerNavigator';
+import Home from './components/Home';
 import { useLogin } from './context/LoginProvider';
 
 const Stack = createStackNavigator();
@@ -20,6 +21,7 @@ const StackNavigator = () => {
             <Stack.Screen component={AppForm} name='AppForm' />
             <Stack.Screen component={ImageUpload} name='ImageUpload' />
             <Stack.Screen component={UserProfile} name='UserProfile' />
+            <Stack.Screen component={DrawerNavigator} name='DrawNavigator' />
         </Stack.Navigator>
     )
 };

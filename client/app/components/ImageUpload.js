@@ -56,7 +56,7 @@ const ImageUpload = (props) => {
 
             if (res.data.success) {
                 props.navigation.dispatch(
-                    StackActions.replace('UserProfile')
+                    StackActions.replace('DrawNavigator')
                 );
             }
         } catch {
@@ -97,7 +97,7 @@ const ImageUpload = (props) => {
                 <Text
                     style={styles.skipBtn}
                     onPress={() => props.navigation.dispatch(
-                        StackActions.replace('UserProfile')
+                        StackActions.replace('DrawNavigator')
                     )}
                 >
                     Skip

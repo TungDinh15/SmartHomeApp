@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { createUser, userSignIn, uploadProfile } = require('../controllers/user');
+const { createUser, userSignIn, uploadProfile, signOut } = require('../controllers/user');
 
 const {
     validateUserSignUp,
@@ -35,6 +35,8 @@ router.post('/create-user', validateUserSignUp, userValidation, createUser);
 
 router.post('/sign-in', validateUserSignIn, userValidation, userSignIn);
 
+router.get('/sign-out', isAuth, signOut)
+
 router.post(
     '/upload-profile',
     isAuth,
@@ -42,9 +44,22 @@ router.post(
     uploadProfile
 );
 
-// router.post('/create-post', isAuth, (req, res) => {
-//     // Create our post
-//     res.send('You are in Secret route');
-// });
+router.get('/profile', isAuth, (req, res) => {
+    if (!req.user)
+        return res.json
+            ({
+                success: false,
+                message: 'Unauthorized access!'
+            })
+
+    res.json
+        ({
+            success: true,
+            profile: {
+                fullname: req.user.fullname,
+                email: req.user.email
+            }
+        })
+})
 
 module.exports = router;

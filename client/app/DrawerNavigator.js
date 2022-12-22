@@ -14,6 +14,9 @@ import {
 import Home from './components/Home';
 import History from './components/History';
 import { useLogin } from './context/LoginProvider';
+import { signOut } from './api/user';
+
+
 
 const Drawer = createDrawerNavigator();
 
@@ -35,8 +38,8 @@ const CustomDrawer = props => {
                     }}
                 >
                     <View>
-                        <Text style={{fontSize: 20}}>{profile.fullname}</Text>
-                        <Text style={{fontSize: 20}}>{profile.email}</Text>
+                        <Text style={{ fontSize: 20 }}>{profile.fullname}</Text>
+                        <Text style={{ fontSize: 20 }}>{profile.email}</Text>
                     </View>
                     <Image
                         source={require('../assets/user.png')}
@@ -57,9 +60,16 @@ const CustomDrawer = props => {
                     backgroundColor: '#f6f6f6',
                     padding: 20,
                 }}
-                onPress={() => setIsLoggedIn(false)}
+                onPress={async () => {
+
+                    const isLoggedOut = await signOut()
+
+                    if (isLoggedOut) {
+                        setIsLoggedIn(false)
+                    }
+                }}
             >
-                <Text style={{fontSize: 20}}>
+                <Text style={{ fontSize: 20 }}>
                     Log Out
                 </Text>
             </TouchableOpacity>

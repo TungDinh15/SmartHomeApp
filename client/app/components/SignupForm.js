@@ -9,6 +9,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import client from '../api/client';
+import { signIn } from '../api/user';
 
 import { StackActions } from '@react-navigation/native';
 
@@ -79,17 +80,16 @@ const SignupForm = ({ navigation }) => {
     };
 
     const signUp = async (values, formikActions) => {
+
+        // setLoginPending(true)
+
         const res = await client.post('/create-user', {
             ...values,
         })
 
         if (res.data.success) {
 
-            const signInRes = await client.post('/sign-in',
-                {
-                    email: values.email,
-                    password: values.password
-                });
+            const signInRes = await signIn(values.email, values.password);
 
             if (signInRes.data.success) {
                 navigation.dispatch(
@@ -100,10 +100,9 @@ const SignupForm = ({ navigation }) => {
             }
         }
 
-        console.log(res.data)
         formikActions.resetForm();
-        formikActions.setSubmitting(false)
-
+        formikActions.setSubmitting(false);
+        // setLoginPending(false);
     };
 
     return (

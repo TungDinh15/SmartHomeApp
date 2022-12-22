@@ -16,6 +16,8 @@ import FormHeader from './FormHeader';
 import FormSelectorBtn from './FormSelectorBtn';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import AppLoader from './AppLoader';
+import useLogin from '../context/LoginProvider';
 
 import axios from 'axios';
 
@@ -27,6 +29,8 @@ const AppForm = ({ navigation }) => {
     const animation = useRef(new Animated.Value(0)).current;
 
     const scrollView = useRef();
+
+    // const { loginPending } = useLogin()
 
     const fetchApi = async (api) => {
         try {
@@ -68,6 +72,7 @@ const AppForm = ({ navigation }) => {
 
 
     return (
+
         <ImageBackground
             source={require('../../assets/main-background.png')}
             resizeMode="cover"
@@ -87,7 +92,13 @@ const AppForm = ({ navigation }) => {
                         />
                     </View>
 
-                    <View style={{ flexDirection: 'row', paddingHorizontal: 20, marginBottom: 40 }}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            paddingHorizontal: 20,
+                            marginBottom: 40
+                        }}
+                    >
                         <FormSelectorBtn
                             style={styles.borderLeft}
                             backgroundColor={loginColorInterpolate}
@@ -109,7 +120,8 @@ const AppForm = ({ navigation }) => {
                         showsHorizontalScrollIndicator={false}
                         scrollEventThrottle={16}
                         onScroll={Animated.event(
-                            [{ nativeEvent: { contentOffset: { x: animation } } }], { useNativeDriver: false }
+                            [{ nativeEvent: { contentOffset: { x: animation } } }],
+                            { useNativeDriver: false }
                         )}
                     >
                         <LoginForm navigation={navigation} />
@@ -120,6 +132,7 @@ const AppForm = ({ navigation }) => {
                 </View>
             </SafeAreaView>
         </ImageBackground>
+        // {/* {loginPending ? <AppLoader /> : null} */}
     )
 }
 

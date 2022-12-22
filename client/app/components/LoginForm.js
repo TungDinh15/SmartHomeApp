@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
-    Dimensions, 
-    TextInput 
+import {
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    TextInput
 } from 'react-native';
 import FormContainer from './FormContainer';
 import FormInput from './FormInput';
 import FormSubmitButton from './FormSubmitButton';
 import { isValidObjField, updateError, isValidEmail } from '../utils/methods';
+
 import client from '../api/client';
+import { signIn } from '../api/user';
+
 import { useLogin } from '../context/LoginProvider';
 
 // import { Container } from './styles';
@@ -23,6 +26,8 @@ const LoginForm = () => {
         email: '',
         password: '',
     });
+
+    // const { setLoginPending } = useLogin();
 
     const [error, setError] = useState('');
 
@@ -44,9 +49,12 @@ const LoginForm = () => {
     }
 
     const submitForm = async () => {
+
+        // setLoginPending(true)
+
         if (isValidForm()) {
             try {
-                const res = await client.post('/sign-in', { ...userInfo });
+                const res = await signIn(userInfo.email, userInfo.password);
 
                 if (res.data.success) {
                     setUserInfo({
@@ -62,6 +70,8 @@ const LoginForm = () => {
                 console.log(error.message);
             }
         }
+
+        // setLoginPending(false);
     };
 
     return (
