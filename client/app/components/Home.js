@@ -6,10 +6,11 @@ import {
     ImageBackground,
     SafeAreaView,
     ScrollView,
-    Image,
+    TouchableOpacity,
 } from 'react-native';
 
-const Home = () => {
+
+const Home = ({ navigation }) => {
     return (
         <ImageBackground
             source={require('../../assets/home-background.jpeg')}
@@ -18,7 +19,7 @@ const Home = () => {
         >
             <SafeAreaView style={styles.container}>
                 <Text
-                style={{fontSize: '30', fontWeight: 'bold', color: 'white'}}
+                    style={{ fontSize: '30', fontWeight: 'bold', color: 'white' }}
                 >
                     HomeM
                 </Text>
@@ -32,12 +33,18 @@ const Home = () => {
                             borderRadius="40%"
                         >
                             <View style={styles.optionContainer}>
-                                <View style={styles.optionTagContainer}>
+                                <TouchableOpacity
+                                    style={styles.optionTagContainer}
+                                    onPress={() => null}
+                                >
                                     <Text style={styles.optionTagText} >Monitor</Text>
-                                </View>
-                                <View style={styles.optionTagContainer}>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.optionTagContainer}
+                                    onPress={() => navigation.navigate('Door')}
+                                >
                                     <Text style={styles.optionTagText} >Manage</Text>
-                                </View>
+                                </TouchableOpacity>
                             </View>
                         </ImageBackground>
                     </View>
@@ -50,12 +57,18 @@ const Home = () => {
                             borderRadius="40%"
                         >
                             <View style={styles.optionContainer}>
-                                <View style={styles.optionTagContainer}>
+                                <TouchableOpacity
+                                    style={styles.optionTagContainer}
+                                    onPress={() => null}
+                                >
                                     <Text style={styles.optionTagText} >Monitor</Text>
-                                </View>
-                                <View style={styles.optionTagContainer}>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.optionTagContainer}
+                                    onPress={() => navigation.navigate('Light')}
+                                >
                                     <Text style={styles.optionTagText} >Manage</Text>
-                                </View>
+                                </TouchableOpacity>
                             </View>
                         </ImageBackground>
                     </View>
@@ -68,12 +81,18 @@ const Home = () => {
                             borderRadius="40%"
                         >
                             <View style={styles.optionContainer}>
-                                <View style={styles.optionTagContainer}>
+                                <TouchableOpacity
+                                    style={styles.optionTagContainer}
+                                    onPress={() => null}
+                                >
                                     <Text style={styles.optionTagText} >Monitor</Text>
-                                </View>
-                                <View style={styles.optionTagContainer}>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.optionTagContainer}
+                                    onPress={() => navigation.navigate('Temperature')}
+                                >
                                     <Text style={styles.optionTagText} >Manage</Text>
-                                </View>
+                                </TouchableOpacity>
                             </View>
                         </ImageBackground>
                     </View>
@@ -121,12 +140,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '20%',
-        borderWidth: '2',
+        borderWidth: '3',
         opacity: 0.85,
     },
     optionTagText: {
         color: 'black',
-        // fontWeight: 'bold',
+        fontWeight: 'bold',
         fontSize: '22',
     }
 })

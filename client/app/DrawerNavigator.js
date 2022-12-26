@@ -13,10 +13,13 @@ import {
 
 import Home from './components/Home';
 import History from './components/History';
+
 import { useLogin } from './context/LoginProvider';
 import { signOut } from './api/user';
 
-
+import DoorManage from './components/manage/DoorManage';
+import LightManage from './components/manage/LightManage';
+import TempManage from './components/manage/TempManage';
 
 const Drawer = createDrawerNavigator();
 
@@ -97,8 +100,12 @@ const DrawerNavigator = () => {
         >
             <Drawer.Screen component={Home} name='Home' />
             <Drawer.Screen component={History} name='History' />
+            <Drawer.Screen component={DoorManage} name='Door' />
+            <Drawer.Screen component={LightManage} name='Light' />
+            <Drawer.Screen component={TempManage} name='Temperature' />
         </Drawer.Navigator>
     );
 };
 
 export default DrawerNavigator;
+

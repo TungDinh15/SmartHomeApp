@@ -124,9 +124,13 @@ const AppForm = ({ navigation }) => {
                             { useNativeDriver: false }
                         )}
                     >
-                        <LoginForm navigation={navigation} />
+                        <LoginForm
+                            navigation={navigation}
+                        />
                         <ScrollView>
-                            <SignupForm navigation={navigation} />
+                            <SignupForm
+                                navigation={navigation}
+                            />
                         </ScrollView>
                     </ScrollView>
                 </View>

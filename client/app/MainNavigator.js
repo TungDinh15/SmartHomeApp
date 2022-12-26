@@ -10,8 +10,8 @@ import AppForm from './components/AppForm';
 import ImageUpload from './components/ImageUpload';
 import UserProfile from './components/UserProfile';
 import DrawerNavigator from './DrawerNavigator';
-import Home from './components/Home';
 import { useLogin } from './context/LoginProvider';
+
 
 const Stack = createStackNavigator();
 
