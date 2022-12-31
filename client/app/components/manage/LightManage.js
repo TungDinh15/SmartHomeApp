@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     StyleSheet,
@@ -9,14 +9,25 @@ import {
     Image,
     Switch
 } from 'react-native';
+import { ref, onValue } from "firebase/database";
+import { db } from '../../../firebase';
 
 const LightManage = ({ navigation }) => {
 
     const [isEnabled1, setIsEnabled1] = useState(false);
-    const toggleSwitch1 = () => setIsEnabled1(previousState1 => !previousState1);
+    const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
 
     const [isEnabled2, setIsEnabled2] = useState(false);
-    const toggleSwitch2 = () => setIsEnabled2(previousState2 => !previousState2);
+    const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
+
+    useEffect(() => {
+        const getDataRef = ref(db, '/Light');
+
+        onValue(getDataRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log(data);
+        });
+    });
 
     return (
         <ImageBackground
@@ -48,7 +59,7 @@ const LightManage = ({ navigation }) => {
                         <Text
                             style={{ color: 'white', fontSize: '35' }}
                         >
-                            Door Admin
+                            Light Admin
                         </Text>
                     </View>
 
@@ -143,7 +154,7 @@ const styles = StyleSheet.create({
         margin: 30,
         marginTop: 60,
         borderRadius: 30,
-        opacity: 0.95
+        opacity: 0.9
     },
     manageContainer: {
         flexDirection: 'column',

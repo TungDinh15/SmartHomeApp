@@ -12,22 +12,18 @@ const app = express();
 app.use(express.json());
 app.use(userRouter);
 
-app.get('/test', (req, res) => {
-    res.send('Hello World')
-});
-
 // Print to website local
 app.get('/', (req, res) => {
     res.json({
         success: true,
         message: 'Backend localhost'
     });
-})
+});
 
 // Listen and notice on port
 app.listen(8000, () => {
     console.log('listening on port')
-})
+});
 
 
 

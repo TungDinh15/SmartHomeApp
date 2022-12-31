@@ -116,12 +116,10 @@ const styles = StyleSheet.create({
     tagFeature: {
         width: '90%',
         height: 300,
-        // justifyContent: 'center',
-        // alignItems: 'center',
         backgroundColor: 'red',
         margin: 20,
         borderRadius: '40%',
-        opacity: 0.95
+        opacity: 0.95,
     },
     optionContainer: {
         justifyContent: 'space-evenly',
@@ -130,8 +128,6 @@ const styles = StyleSheet.create({
         height: '30%',
         flexDirection: 'row',
         marginTop: '55%',
-        // backgroundColor: 'pink',
-        // borderWidth: 1,
     },
     optionTagContainer: {
         width: '45%',

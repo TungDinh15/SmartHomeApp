@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     StyleSheet,
@@ -7,13 +7,26 @@ import {
     Text,
     TouchableOpacity,
     Image,
-    Switch
+    Switch,
 } from 'react-native';
+import { ref, onValue } from "firebase/database";
+import { db } from '../../../firebase';
 
 const DoorManage = ({ navigation }) => {
 
+    useEffect(() => {
+        const getDataRef = ref(db, 'Door/');
+
+        onValue(getDataRef, (snapshot) => {
+            const data = snapshot.val();
+            // console.log('Door status:',data);
+        });
+    });
+
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    console.log(isEnabled);
 
     return (
         <ImageBackground
@@ -119,7 +132,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FDF4A2',
         margin: 30,
         borderRadius: 30,
-        opacity: 0.95
+        opacity: 0.9
     },
     manageContainer: {
         flexDirection: 'column',

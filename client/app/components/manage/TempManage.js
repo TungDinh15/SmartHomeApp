@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     StyleSheet,
@@ -9,11 +9,31 @@ import {
     Image,
     Switch
 } from 'react-native';
+import { onValue, ref } from 'firebase/database';
+import { db } from '../../../firebase';
 
 const TempManage = ({ navigation }) => {
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const [temp, setTemp] = useState(0);
+
+    const [isEnabled1, setIsEnabled1] = useState(false);
+    const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+
+    const [isEnabled2, setIsEnabled2] = useState(false);
+    const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
+
+    useEffect(() => {
+        const getDataRef = ref(db, 'Temp/');
+
+        onValue(getDataRef, (snapshot) => {
+            const data = snapshot.val();
+            // console.log(data);
+            // console.log(data.currentTemp);
+            setTemp(data.currentTemp);
+        });
+    }, []);
+
+    console.log(temp);
 
     return (
         <ImageBackground
@@ -45,7 +65,7 @@ const TempManage = ({ navigation }) => {
                         <Text
                             style={{ color: 'white', fontSize: '35' }}
                         >
-                            Door Admin
+                            Temp Admin
                         </Text>
                     </View>
 
@@ -77,25 +97,43 @@ const TempManage = ({ navigation }) => {
                         <Text
                             style={[styles.manageText, { color: 'red', fontSize: '35' }]}
                         >
-                            50 °C
+                            {temp}°C
                         </Text>
-
                     </View>
-                    {/* Manage Fan */}
+
+                    {/* Manage Fan 1*/}
                     <View
                         style={styles.manageContainer}
                     >
                         <Text
                             style={styles.manageText}
                         >
-                            Fan
+                            Living Room Fan
                         </Text>
                         <Switch
                             trackColor={{ false: "#767577", true: "#28C904" }}
-                            thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+                            thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch}
-                            value={isEnabled}
+                            onValueChange={toggleSwitch1}
+                            value={isEnabled1}
+                        />
+
+                    </View>
+                    {/* Manage Fan 2 */}
+                    <View
+                        style={styles.manageContainer}
+                    >
+                        <Text
+                            style={styles.manageText}
+                        >
+                            Bedroom Fan
+                        </Text>
+                        <Switch
+                            trackColor={{ false: "#767577", true: "#28C904" }}
+                            thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch2}
+                            value={isEnabled2}
                         />
 
                     </View>
@@ -133,18 +171,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         width: '85%',
-        height: 400,
+        height: '80%',
         backgroundColor: '#FDF4A2',
         margin: 30,
         borderRadius: 30,
-        opacity: 0.95
+        opacity: 0.9
     },
     manageContainer: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         width: '90%',
-        height: '40%',
+        height: '25%',
         borderRadius: 20,
         borderWidth: 2,
         margin: 20,
