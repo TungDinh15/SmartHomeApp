@@ -9,7 +9,7 @@ import {
     Image,
     Switch
 } from 'react-native';
-import { onValue, ref } from 'firebase/database';
+import { onValue, ref, set } from 'firebase/database';
 import { db } from '../../../firebase';
 
 const TempManage = ({ navigation }) => {
@@ -17,21 +17,41 @@ const TempManage = ({ navigation }) => {
     const [temp, setTemp] = useState(0);
 
     const [isEnabled1, setIsEnabled1] = useState(false);
-    const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+    // const toggleSwitch1 = () => {
+    //     setIsEnabled1(previousState => !previousState)
+    // };
 
     const [isEnabled2, setIsEnabled2] = useState(false);
-    const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
+    // const toggleSwitch2 = () => {
+    //     setIsEnabled2(previousState => !previousState)
+    // };
 
     useEffect(() => {
         const getDataRef = ref(db, 'Temp/');
 
         onValue(getDataRef, (snapshot) => {
             const data = snapshot.val();
-            // console.log(data);
-            // console.log(data.currentTemp);
+            // console.log(data)
+
+            console.log('Temperature:', data.currentTemp);
             setTemp(data.currentTemp);
+
+            console.log('Fan 1 status:', data.fan1);
+            setIsEnabled1(data.fan1);
+
+            console.log('Fan 2 status:', data.fan2);
+            setIsEnabled2(data.fan2);
         });
     }, []);
+
+    const updateState1 = () => {
+        set(ref(db, 'Temp/fan1'), !isEnabled1);
+    };
+
+    // Update Door State from App to Firebase
+    const updateState2 = () => {
+        set(ref(db, 'Temp/fan2'), !isEnabled2);
+    };
 
     console.log(temp);
 
@@ -114,8 +134,9 @@ const TempManage = ({ navigation }) => {
                             trackColor={{ false: "#767577", true: "#28C904" }}
                             thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch1}
+                            // onValueChange={toggleSwitch1}
                             value={isEnabled1}
+                            onChange={() => updateState1}
                         />
 
                     </View>
@@ -132,8 +153,9 @@ const TempManage = ({ navigation }) => {
                             trackColor={{ false: "#767577", true: "#28C904" }}
                             thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch2}
+                            // onValueChange={toggleSwitch2}
                             value={isEnabled2}
+                            onChange={() => updateState2}
                         />
 
                     </View>

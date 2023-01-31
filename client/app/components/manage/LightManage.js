@@ -9,25 +9,44 @@ import {
     Image,
     Switch
 } from 'react-native';
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { db } from '../../../firebase';
 
 const LightManage = ({ navigation }) => {
 
     const [isEnabled1, setIsEnabled1] = useState(false);
-    const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+    // const toggleSwitch1 = () => {
+    //     setIsEnabled1(previousState => !previousState)
+    // };
 
     const [isEnabled2, setIsEnabled2] = useState(false);
-    const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
+    // const toggleSwitch2 = () => {
+    //     setIsEnabled2(previousState => !previousState)
+    // };
 
     useEffect(() => {
         const getDataRef = ref(db, '/Light');
 
         onValue(getDataRef, (snapshot) => {
             const data = snapshot.val();
-            console.log(data);
+
+            console.log('Light 1 status:', data.light1);
+            setIsEnabled1(data.light1);
+
+            console.log('Light 2 status:', data.light2);
+            setIsEnabled2(data.light2);
         });
-    });
+    }, []);
+
+    // Update Door State from App to Firebase
+    const updateState1 = () => {
+        set(ref(db, 'Light/light1'), !isEnabled1);
+    };
+
+    // Update Door State from App to Firebase
+    const updateState2 = () => {
+        set(ref(db, 'Light/light2'), !isEnabled2);
+    };
 
     return (
         <ImageBackground
@@ -92,8 +111,9 @@ const LightManage = ({ navigation }) => {
                             trackColor={{ false: "#767577", true: "#28C904" }}
                             thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch1}
+                            // onValueChange={toggleSwitch1}
                             value={isEnabled1}
+                            onChange={() => updateState1()}
                         />
 
                     </View>
@@ -111,8 +131,9 @@ const LightManage = ({ navigation }) => {
                             trackColor={{ false: "#767577", true: "#28C904" }}
                             thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch2}
+                            // onValueChange={toggleSwitch2}
                             value={isEnabled2}
+                            onChange={() => updateState2()}
                         />
 
                     </View>

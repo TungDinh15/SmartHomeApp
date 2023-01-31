@@ -9,24 +9,33 @@ import {
     Image,
     Switch,
 } from 'react-native';
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { db } from '../../../firebase';
 
 const DoorManage = ({ navigation }) => {
 
+    const [isEnabled, setIsEnabled] = useState(false);
+    // const toggleSwitch = () => {
+    //     setIsEnabled(previousState => !previousState);
+    // };
+
+    // Get Door State in Firebase
     useEffect(() => {
         const getDataRef = ref(db, 'Door/');
 
         onValue(getDataRef, (snapshot) => {
             const data = snapshot.val();
-            // console.log('Door status:',data);
+            console.log('Door status:', data);
+            setIsEnabled(data)
         });
-    });
+    }, []);
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    // console.log(isEnabled);
 
-    console.log(isEnabled);
+    // Update Door State from App to Firebase
+    const updateState = () => {
+        set(ref(db, 'Door/'), !isEnabled);
+    };
 
     return (
         <ImageBackground
@@ -90,8 +99,9 @@ const DoorManage = ({ navigation }) => {
                             trackColor={{ false: "#767577", true: "#28C904" }}
                             thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch}
+                            // onValueChange={toggleSwitch}
                             value={isEnabled}
+                            onChange={() => updateState()}
                         />
 
                     </View>
