@@ -11,20 +11,14 @@ import {
 } from 'react-native';
 import { onValue, ref, set } from 'firebase/database';
 import { db } from '../../../firebase';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 const TempManage = ({ navigation }) => {
 
     const [temp, setTemp] = useState(0);
 
     const [isEnabled3, setIsEnabled3] = useState(false);
-    // const toggleSwitch1 = () => {
-    //     setIsEnabled1(previousState => !previousState)
-    // };
-
     const [isEnabled4, setIsEnabled4] = useState(false);
-    // const toggleSwitch2 = () => {
-    //     setIsEnabled2(previousState => !previousState)
-    // };
 
     useEffect(() => {
         const getDataRef = ref(db, 'Temp/');
@@ -42,123 +36,148 @@ const TempManage = ({ navigation }) => {
         });
     }, []);
 
+    // update fan 1 State from App to Firebase 
     const updateState3 = () => {
         set(ref(db, 'Temp/fan1'), !isEnabled3);
+        if (!isEnabled3) {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Temperature',
+                textBody: 'Living room fan is opened successfully !',
+            });
+        } else {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Temperature',
+                textBody: 'Living room fan is closed successfully !',
+            });
+        };
     };
 
-    // Update Door State from App to Firebase
+    // Update fan 2 State from App to Firebase
     const updateState4 = () => {
         set(ref(db, 'Temp/fan2'), !isEnabled4);
+        if (!isEnabled4) {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Temperature',
+                textBody: 'Bedroom fan is opened successfully !',
+            });
+        } else {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Temperature',
+                textBody: 'Bedroom fan is closed successfully !',
+            });
+        };
     };
 
     return (
-        <ImageBackground
-            source={require('../../../assets/temperature.jpeg')}
-            resizeMode="cover"
-            style={{ width: '100%', height: '100%' }}
-        >
-            <SafeAreaView
-                style={styles.container}
+        <AlertNotificationRoot>
+            <ImageBackground
+                source={require('../../../assets/temperature.jpeg')}
+                resizeMode="cover"
+                style={{ width: '100%', height: '100%' }}
             >
-                {/* Title View */}
-                <View
-                    style={styles.titleContainer}
+                <SafeAreaView
+                    style={styles.container}
                 >
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                        style={styles.backButton}
-                    >
-                        <Image
-                            source={require('../../../assets/back.png')}
-                            resizeMode='cover'
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    </TouchableOpacity>
-
+                    {/* Title View */}
                     <View
-                    // style={{ borderWidth: 3 }}
+                        style={styles.titleContainer}
                     >
-                        <Text
-                            style={{ color: 'white', fontSize: '35' }}
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={styles.backButton}
                         >
-                            Temp Admin
-                        </Text>
+                            <Image
+                                source={require('../../../assets/back.png')}
+                                resizeMode='cover'
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </TouchableOpacity>
+
+                        <View
+                        // style={{ borderWidth: 3 }}
+                        >
+                            <Text
+                                style={{ color: 'white', fontSize: '35' }}
+                            >
+                                Temp Admin
+                            </Text>
+                        </View>
+
+                        <TouchableOpacity
+                            onPress={() => null}
+                            style={styles.histButton}
+                        >
+                            <Image
+                                source={require('../../../assets/hist.png')}
+                                resizeMode='cover'
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity
-                        onPress={() => null}
-                        style={styles.histButton}
-                    >
-                        <Image
-                            source={require('../../../assets/hist.png')}
-                            resizeMode='cover'
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    </TouchableOpacity>
-                </View>
-
-                {/* Main View */}
-                <View
-                    style={styles.mainContainer}
-                >
-                    {/* Current Temp */}
+                    {/* Main View */}
                     <View
-                        style={styles.manageContainer}
+                        style={styles.mainContainer}
                     >
-                        <Text
-                            style={styles.manageText}
+                        {/* Current Temp */}
+                        <View
+                            style={styles.manageContainer}
                         >
-                            Temperature:
-                        </Text>
-                        <Text
-                            style={[styles.manageText, { color: 'red', fontSize: '35' }]}
+                            <Text
+                                style={styles.manageText}
+                            >
+                                Temperature:
+                            </Text>
+                            <Text
+                                style={[styles.manageText, { color: 'red', fontSize: '35' }]}
+                            >
+                                {temp}°C
+                            </Text>
+                        </View>
+
+                        {/* Manage Fan 1*/}
+                        <View
+                            style={styles.manageContainer}
                         >
-                            {temp}°C
-                        </Text>
+                            <Text
+                                style={styles.manageText}
+                            >
+                                Living Room Fan
+                            </Text>
+                            <Switch
+                                trackColor={{ false: "#767577", true: "#28C904" }}
+                                thumbColor={isEnabled3 ? "#f4f3f4" : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                value={isEnabled3}
+                                onChange={() => updateState3()}
+                            />
+
+                        </View>
+                        {/* Manage Fan 2 */}
+                        <View
+                            style={styles.manageContainer}
+                        >
+                            <Text
+                                style={styles.manageText}
+                            >
+                                Bedroom Fan
+                            </Text>
+                            <Switch
+                                trackColor={{ false: "#767577", true: "#28C904" }}
+                                thumbColor={isEnabled4 ? "#f4f3f4" : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                value={isEnabled4}
+                                onChange={() => updateState4()}
+                            />
+                        </View>
                     </View>
-
-                    {/* Manage Fan 1*/}
-                    <View
-                        style={styles.manageContainer}
-                    >
-                        <Text
-                            style={styles.manageText}
-                        >
-                            Living Room Fan
-                        </Text>
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#28C904" }}
-                            thumbColor={isEnabled3 ? "#f4f3f4" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch1}
-                            value={isEnabled3}
-                            onChange={() => updateState3()}
-                        />
-
-                    </View>
-                    {/* Manage Fan 2 */}
-                    <View
-                        style={styles.manageContainer}
-                    >
-                        <Text
-                            style={styles.manageText}
-                        >
-                            Bedroom Fan
-                        </Text>
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#28C904" }}
-                            thumbColor={isEnabled4 ? "#f4f3f4" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch2}
-                            value={isEnabled4}
-                            onChange={() => updateState4()}
-                        />
-
-                    </View>
-                </View>
-            </SafeAreaView>
-
-        </ImageBackground>
+                </SafeAreaView>
+            </ImageBackground>
+        </AlertNotificationRoot>
     );
 }
 

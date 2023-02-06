@@ -11,19 +11,14 @@ import {
 } from 'react-native';
 import { ref, onValue, set } from "firebase/database";
 import { db } from '../../../firebase';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 const LightManage = ({ navigation }) => {
 
     const [isEnabled1, setIsEnabled1] = useState(false);
-    // const toggleSwitch1 = () => {
-    //     setIsEnabled1(previousState => !previousState)
-    // };
-
     const [isEnabled2, setIsEnabled2] = useState(false);
-    // const toggleSwitch2 = () => {
-    //     setIsEnabled2(previousState => !previousState)
-    // };
 
+    // Get realtime data from Firebase
     useEffect(() => {
         const getDataRef = ref(db, '/Light');
 
@@ -38,108 +33,135 @@ const LightManage = ({ navigation }) => {
         });
     }, []);
 
-    // Update Door State from App to Firebase
+    // Update Light 1 State from App to Firebase
     const updateState1 = () => {
         set(ref(db, 'Light/light1'), !isEnabled1);
+        if (!isEnabled1) {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Light',
+                textBody: 'Living room light is opened successfully !',
+            });
+        } else {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Light',
+                textBody: 'Living room light is closed successfully !',
+            });
+        };
     };
 
-    // Update Door State from App to Firebase
+    // Update Light 2 State from App to Firebase
     const updateState2 = () => {
         set(ref(db, 'Light/light2'), !isEnabled2);
+        if (!isEnabled2) {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Light',
+                textBody: 'Bedroom light is opened successfully !',
+            });
+        } else {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Light',
+                textBody: 'Bedroom light is closed successfully !',
+            });
+        };
     };
 
     return (
-        <ImageBackground
-            source={require('../../../assets/light.jpeg')}
-            resizeMode="cover"
-            style={{ width: '100%', height: '100%' }}
-        >
-            <SafeAreaView
-                style={styles.container}
+        <AlertNotificationRoot>
+            <ImageBackground
+                source={require('../../../assets/light.jpeg')}
+                resizeMode="cover"
+                style={{ width: '100%', height: '100%' }}
             >
-                {/* Title View */}
-                <View
-                    style={styles.titleContainer}
+                <SafeAreaView
+                    style={styles.container}
                 >
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                        style={styles.backButton}
-                    >
-                        <Image
-                            source={require('../../../assets/back.png')}
-                            resizeMode='cover'
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    </TouchableOpacity>
-
+                    {/* Title View */}
                     <View
-                    // style={{ borderWidth: 3 }}
+                        style={styles.titleContainer}
                     >
-                        <Text
-                            style={{ color: 'white', fontSize: '35' }}
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={styles.backButton}
                         >
-                            Light Admin
-                        </Text>
+                            <Image
+                                source={require('../../../assets/back.png')}
+                                resizeMode='cover'
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </TouchableOpacity>
+
+                        <View
+                        // style={{ borderWidth: 3 }}
+                        >
+                            <Text
+                                style={{ color: 'white', fontSize: '35' }}
+                            >
+                                Light Admin
+                            </Text>
+                        </View>
+
+                        <TouchableOpacity
+                            onPress={() => null}
+                            style={styles.histButton}
+                        >
+                            <Image
+                                source={require('../../../assets/hist.png')}
+                                resizeMode='cover'
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity
-                        onPress={() => null}
-                        style={styles.histButton}
-                    >
-                        <Image
-                            source={require('../../../assets/hist.png')}
-                            resizeMode='cover'
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    </TouchableOpacity>
-                </View>
-
-                {/* Main View */}
-                <View
-                    style={styles.mainContainer}
-                >
-                    {/* Light 1 */}
+                    {/* Main View */}
                     <View
-                        style={styles.manageContainer}
+                        style={styles.mainContainer}
                     >
-                        <Text
-                            style={styles.manageText}
+                        {/* Light 1 */}
+                        <View
+                            style={styles.manageContainer}
                         >
-                            Living room Light
-                        </Text>
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#28C904" }}
-                            thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch1}
-                            value={isEnabled1}
-                            onChange={() => updateState1()}
-                        />
+                            <Text
+                                style={styles.manageText}
+                            >
+                                Living room Light
+                            </Text>
+                            <Switch
+                                trackColor={{ false: "#767577", true: "#28C904" }}
+                                thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                // onValueChange={toggleSwitch1}
+                                value={isEnabled1}
+                                onChange={() => updateState1()}
+                            />
 
-                    </View>
+                        </View>
 
-                    {/* Light 2 */}
-                    <View
-                        style={styles.manageContainer}
-                    >
-                        <Text
-                            style={styles.manageText}
+                        {/* Light 2 */}
+                        <View
+                            style={styles.manageContainer}
                         >
-                            Bedroom Light
-                        </Text>
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#28C904" }}
-                            thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch2}
-                            value={isEnabled2}
-                            onChange={() => updateState2()}
-                        />
+                            <Text
+                                style={styles.manageText}
+                            >
+                                Bedroom Light
+                            </Text>
+                            <Switch
+                                trackColor={{ false: "#767577", true: "#28C904" }}
+                                thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                value={isEnabled2}
+                                onChange={() => updateState2()}
+                            />
 
+                        </View>
                     </View>
-                </View>
-            </SafeAreaView>
-        </ImageBackground>
+                </SafeAreaView>
+            </ImageBackground>
+        </AlertNotificationRoot>
     );
 }
 

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { ref, onValue, set } from "firebase/database";
 import { db } from '../../../firebase';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 const DoorManage = ({ navigation }) => {
 
@@ -35,79 +36,95 @@ const DoorManage = ({ navigation }) => {
     // Update Door State from App to Firebase
     const updateState = () => {
         set(ref(db, 'Door/'), !isEnabled);
+        if (!isEnabled){
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Main Door',
+                textBody: 'Door is opened successfully !',
+            });
+        } else {
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Main Door',
+                textBody: 'Door is closed successfully !',
+            });
+        };
     };
 
     return (
-        <ImageBackground
-            source={require('../../../assets/door.jpeg')}
-            resizeMode="stretch"
-            style={{ width: '100%', height: '100%' }}
-        >
-            <SafeAreaView
-                style={styles.container}
+        <AlertNotificationRoot>
+            <ImageBackground
+                source={require('../../../assets/door.jpeg')}
+                resizeMode="stretch"
+                style={{ width: '100%', height: '100%' }}
             >
-                {/* Title View */}
-                <View
-                    style={styles.titleContainer}
+                <SafeAreaView
+                    style={styles.container}
                 >
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                        style={styles.backButton}
-                    >
-                        <Image
-                            source={require('../../../assets/back.png')}
-                            resizeMode='cover'
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    </TouchableOpacity>
 
                     <View
-                    // style={{ borderWidth: 3 }}
+                        style={styles.titleContainer}
                     >
-                        <Text
-                            style={{ color: 'white', fontSize: '35' }}
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={styles.backButton}
                         >
-                            Door Admin
-                        </Text>
+                            <Image
+                                source={require('../../../assets/back.png')}
+                                resizeMode='cover'
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </TouchableOpacity>
+
+                        <View
+                        // style={{ borderWidth: 3 }}
+                        >
+                            <Text
+                                style={{ color: 'white', fontSize: '35' }}
+                            >
+                                Door Admin
+                            </Text>
+                        </View>
+
+                        <TouchableOpacity
+                            onPress={() => null}
+                            style={styles.histButton}
+                        >
+                            <Image
+                                source={require('../../../assets/hist.png')}
+                                resizeMode='cover'
+                                style={{ width: '100%', height: '100%' }}
+                            />
+                        </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity
-                        onPress={() => null}
-                        style={styles.histButton}
-                    >
-                        <Image
-                            source={require('../../../assets/hist.png')}
-                            resizeMode='cover'
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    </TouchableOpacity>
-                </View>
-
-                {/* Main View */}
-                <View
-                    style={styles.mainContainer}
-                >
+                    {/* Main View */}
                     <View
-                        style={styles.manageContainer}
+                        style={styles.mainContainer}
                     >
-                        <Text
-                            style={styles.manageText}
+                        <View
+                            style={styles.manageContainer}
                         >
-                            Main Door
-                        </Text>
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#28C904" }}
-                            thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch}
-                            value={isEnabled}
-                            onChange={() => updateState()}
-                        />
-
+                            <Text
+                                style={styles.manageText}
+                            >
+                                Main Door
+                            </Text>
+                            <Switch
+                                trackColor={{ false: "#767577", true: "#28C904" }}
+                                thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                value={isEnabled}
+                                onChange={() => updateState()}
+                            />
+                        </View>
                     </View>
-                </View>
-            </SafeAreaView>
-        </ImageBackground>
+
+                    {/* Title View */}
+
+                </SafeAreaView>
+            </ImageBackground>
+        </AlertNotificationRoot>
     );
 }
 
